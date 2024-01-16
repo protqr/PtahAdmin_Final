@@ -8,15 +8,19 @@ import {
   updatePatient,
   deletePatient,
 } from "../controllers/PatientController.js";
+import {
+  validatePatientInput,
+  validateIdParam,
+} from "../middleware/validationMiddleware.js";
 
 // router.get('/', getAllPatients);
 // router.post('/', createPatient);
 
-router.route("/").get(getAllPatients).post(createPatient);
+router.route("/").get(getAllPatients).post(validatePatientInput, createPatient);
 router
   .route("/:idPatient")
-  .get(getPatient)
-  .patch(updatePatient)
-  .delete(deletePatient);
+  .get(validateIdParam, getPatient)
+  .patch(validatePatientInput, validateIdParam, updatePatient)
+  .delete(validateIdParam, deletePatient);
 
 export default router;

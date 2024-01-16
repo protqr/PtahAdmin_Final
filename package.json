@@ -1,18 +1,20 @@
 {
   "name": "ptah_admin",
   "version": "1.0.0",
-  "description": "[Jobify](https://jobify.live/)",
+  "description": "[](https://.live/)",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "setup-project": "npm i && cd client && npm i",
-    "dev": "nodemon server.js",
-    "watch": "node --watch server.js "
+    "server": "nodemon server",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently --kill-others-on-fail \" npm run server\" \" npm run client\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.3.6",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.37.3",
     "concurrently": "^8.0.1",
@@ -33,6 +35,9 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nanoid": "^4.0.2",
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-toastify": "^9.1.2"
   }
 }

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { TYPEPOSTURES, CHOOSEPOSTURES } from "../utils/constants.js";
 
 const PatientSchema = new mongoose.Schema(
   {
@@ -6,21 +7,19 @@ const PatientSchema = new mongoose.Schema(
     namePatient: String,
     typePostures: {
       type: String,
-      enum: ["หลอดเลือดสมองระยะฟื้นฟู", "หลอดเลือดสมองระยะฟื้นฟู2"],
-      default: "หลอดเลือดสมองระยะฟื้นฟู",
+      enum: Object.values(TYPEPOSTURES),
+      default: TYPEPOSTURES.TYPE_1,
     },
-    choosePostures: {
-      type: String,
-      enum: [
-        "ท่าทั้งหมด",
-        "ท่าที่ 1",
-        "ท่าที่ 2",
-        "ท่าที่ 3",
-        "ท่าที่ 4",
-        "ท่าที่ 5",
-        "ท่าที่ 6",
-      ],
-      default: "ท่าทั้งหมด",
+    choosePostures: [
+      {
+        type: String,
+        enum: CHOOSEPOSTURES,
+        default: CHOOSEPOSTURES[0], // ตั้งค่าเริ่มต้น
+      },
+    ],
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true }

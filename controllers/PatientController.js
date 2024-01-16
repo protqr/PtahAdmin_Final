@@ -1,4 +1,5 @@
 import Patient from "../models/PatientModel.js";
+import { StatusCodes } from "http-status-codes";
 
 import { nanoid } from "nanoid";
 
@@ -13,13 +14,14 @@ import { nanoid } from "nanoid";
 // };
 
 export const getAllPatients = async (req, res) => {
-  const allusers = await Patient.find({});
-  res.status(200).json({ allusers });
+  const allusers = await Patient.find({createdBy:req.user.userId});
+  res.status(StatusCodes.OK).json({ allusers });
 };
 
 export const createPatient = async (req, res) => {
+  req.body.createdBy = req.user.userId;
   const patientuser = await Patient.create(req.body);
-  res.status(201).json({ patientuser });
+  res.status(StatusCodes.CREATED).json({ patientuser });
 };
 
 // export const getPatient = async (req, res) => {
@@ -35,14 +37,9 @@ export const createPatient = async (req, res) => {
 // };
 
 export const getPatient = async (req, res) => {
-  const { idPatient } = req.params;
-  const patient = await Patient.findById(idPatient);
-  if (!patient) {
-    return res
-      .status(404)
-      .json({ msg: `ไม่พบหมายเลขผู้ป่วย ${idPatient} ในฐานข้อมูลนี้` });
-  }
-  res.status(200).json({ patient });
+  const patient = await Patient.findById(req.params.idPatient);
+  if (!patient) throw new NotFoundError(`no patient with id : ${idPatient}`);
+  res.status(StatusCodes.OK).json({ patient });
 };
 
 // export const updatePatient = async (req, res) => {
@@ -63,17 +60,22 @@ export const getPatient = async (req, res) => {
 // };
 
 export const updatePatient = async (req, res) => {
-  const { idPatient } = req.params;
+  const updatedPatient = await Patient.findByIdAndUpdate(
+    req.params.idPatient,
+    req.body,
+    {
+      new: true,
+    }
+  );
 
-  const updatedPatient = await Patient.findByIdAndUpdate(idPatient, req.body, {
-    new: true,
-  });
+  if (!updatedPatient)
+    throw new NotFoundError(`no patient with id : ${idPatient}`);
 
-  if (!updatedPatient) {
-    return res.status(404).json({ msg: `no patient with id ${idPatient}` });
-  }
+  // {
+  //   return res.status(404).json({ msg: `no patient with id ${idPatient}` });
+  // }
 
-  res.status(200).json({ patient: updatedPatient });
+  res.status(StatusCodes.OK).json({ patient: updatedPatient });
 };
 
 // export const deletePatient = async (req, res) => {
@@ -93,11 +95,13 @@ export const updatePatient = async (req, res) => {
 // };
 
 export const deletePatient = async (req, res) => {
-  const { idPatient } = req.params;
-  const removedPatient = await Patient.findByIdAndDelete(idPatient);
+  const removedPatient = await Patient.findByIdAndDelete(req.params.idPatient);
 
-  if (!removedPatient) {
-    return res.status(404).json({ msg: `no patient with id ${idPatient}` });
-  }
-  res.status(200).json({ patient: removedPatient });
+  if (!removedPatient)
+    throw new NotFoundError(`no patient with id : ${idPatient}`);
+
+  // {
+  //   return res.status(404).json({ msg: `no patient with id ${idPatient}` });
+  // }
+  res.status(StatusCodes.OK).json({ patient: removedPatient });
 };
