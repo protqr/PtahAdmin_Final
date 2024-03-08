@@ -49,6 +49,7 @@ app.use("/api/v1/allusers", authenticateUser, PatientRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", authenticateUser, userRouter);
 
+
 // ไม่พบข้อมูล
 app.use("*", (req, res) => {
   res.status(404).json({ msg: "Not Found" });

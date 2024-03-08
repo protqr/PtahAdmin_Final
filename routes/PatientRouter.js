@@ -7,6 +7,7 @@ import {
   createPatient,
   updatePatient,
   deletePatient,
+  showStats,
 } from "../controllers/PatientController.js";
 import {
   validatePatientInput,
@@ -17,10 +18,13 @@ import {
 // router.post('/', createPatient);
 
 router.route("/").get(getAllPatients).post(validatePatientInput, createPatient);
+
+router.route('/stats').get(showStats);
+
 router
-  .route("/:idPatient")
+  .route("/:_id")
   .get(validateIdParam, getPatient)
-  .patch(validatePatientInput, validateIdParam, updatePatient)
+  .patch(validateIdParam, updatePatient)
   .delete(validateIdParam, deletePatient);
 
 export default router;

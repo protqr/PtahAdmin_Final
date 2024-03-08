@@ -13,6 +13,11 @@ export const CHOOSEPOSTURES = [
   "ท่าที่ 6",
 ];
 
+export const TYPESTATUS = {
+  TYPE_ST1: "กำลังรักษาอยู่",
+  TYPE_ST2: "จบการรักษา",
+};
+
 export const POSTURES_SORT_BY = {
   NEWEST_FIRST: "newest",
   OLDEST_FIRST: "oldest",
